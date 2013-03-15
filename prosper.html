@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge;chrome=1">
+<style>
+	svg {
+		border: 1px solid #000;
+	}
+</style>
+
+<title>Prosper Platform Monitor</title>
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+        <style>
+            body {
+                padding-top: 60px;
+                padding-bottom: 40px;
+            }
+        </style>
+
+<link href="/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css">
+<link href="/css/main.css" rel="stylesheet">
+<link href="prosper.css" rel="stylesheet" type="text/css">
+<script src="/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+<script src="/js/vendor/jquery-1.9.0.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href="/">Le Truong</a>
+                <div class="nav-collapse collapse">
+                    <ul class="nav">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--there used to be a secondary nav bar, what is that?-->
+
+    <div class="row-fluid">
+        <div class="span10 offset2">
+            <h1> Prosper Platform Monitor</h1>
+            <div id="progress"></div>
+            <div id="lastDBUpdated"></div>
+            <div id="lastUpdated"></div>
+            <div id="nextUpdated"></div>
+            <div id="timer"></div>
+            <div>
+                <svg id="visualisation" width ="800" height="400"></svg>
+                <form id = "controls">
+                	<div class="menu">
+                		<h2>X axis</h2>
+                		<ul id="x-axis"></ul>
+                	</div>
+                	<div class="menu">
+                		<h2>Y axis</h2>
+                		<ul id="y-axis"></ul>
+                	</div>
+                	<div class="menu">
+                		<h2>Radius</h2>
+                		<ul id="r-axis"></ul>
+                	</div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+<script type="text/javascript" src="prosper.js"></script>
+
+
+</html>
+

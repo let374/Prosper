@@ -1,0 +1,31 @@
+body
+{
+	background-color: #fff;
+	font-family: sans-serif;
+	color: #000;
+
+}
+ul
+{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.menu
+{
+	float: left;
+	width: 200px;
+	font-size: 10px;
+}
+.axis text
+{
+	fill: #fff;
+}
+.axis .domain
+{
+	opacity: 0;
+}
+.tick
+{
+	stroke: #000;
+}
