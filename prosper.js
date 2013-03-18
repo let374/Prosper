@@ -1,6 +1,6 @@
 var WIDTH = 800,
 	HEIGHT = 350,
-	MARGINS = {top: 50, right: 50, bottom: 50, left: 100},
+	MARGINS = {top: 25, right: 25, bottom: 25, left: 50},
 	xRange = d3.scale.linear().range ([MARGINS.left, WIDTH - MARGINS.right]),
 	yRange = d3.scale.linear().range ([HEIGHT - MARGINS.top, MARGINS.bottom]),
 	rRange = d3.scale.linear().range([5,20]),
@@ -8,7 +8,7 @@ var WIDTH = 800,
 	rawData,
 	drawingData,
 	xAxis = d3.svg.axis().scale(xRange).tickSize(20).tickSubdivide(true),
-	yAxis = d3.svg.axis().scale(yRange).tickSize(10).orient("right").tickSubdivide(true),
+	yAxis = d3.svg.axis().scale(yRange).tickSize(10).orient("left").tickSubdivide(true),
 	fields,
 	lastUpdated,
 	lastUpdateTime,
@@ -26,13 +26,15 @@ function startTime() {
 
 function init () {
 	vis = d3.select("#visualisation");
+	vis.append("svg:g")
+		.attr("class", "y axis")
+		.attr("transform", "translate(" + MARGINS.left + ",0)")
+		.call(yAxis);
 	vis.append("svg:g") // add a container for the axis
 		.attr("class", "x axis") // add some classes so we can style it
 		.attr("transform", "translate(0," + HEIGHT + ")")
 		.call(xAxis); // finally, add the axis to the visualisation
-	vis.append("svg:g")
-		.attr("class", "y axis")
-		.call(yAxis);
+
  
 	//get field level data
 
@@ -67,7 +69,7 @@ function init () {
 		});
 }
 
-function generateFieldsList (data) {
+function generateFieldsList (data) { //this is for the initial procedure
 	var xselect = document.getElementById("x-axis"),
 		yselect = document.getElementById("y-axis"),
 		rselect = document.getElementById("r-axis"),
@@ -93,15 +95,6 @@ function redraw() {
 	var listings = vis.selectAll ("circle").data(drawingData, function (d) { return d.id;}),
 		axes = getAxes();
 
-	listings.enter()
-		.insert("svg:circle")
-			.attr("cx", function(d) { return xRange (d[axes.xAxis]); })
-			.attr("cy", function(d) { return yRange (d[axes.yAxis]); })
-			.attr("stroke", "black")
-			.style("opacity", 0)
-			.attr("fill-opacity", 0)
-			;
-
 	xRange.domain([
 		d3.min(drawingData, function(d) { return +d[axes.xAxis]; }),
 		d3.max(drawingData, function(d) { return +d[axes.xAxis]; })
@@ -116,6 +109,15 @@ function redraw() {
 		d3.min(drawingData, function(d) { return +d[axes.radiusAxis]; }),
 		d3.max(drawingData, function(d) { return +d[axes.radiusAxis]; })
 	]);
+
+	listings.enter()
+		.insert("svg:circle")
+			.attr("cx", function(d) { return xRange (d[axes.xAxis]); })
+			.attr("cy", function(d) { return yRange (d[axes.yAxis]); })
+			.attr("stroke", "black")
+			.style("opacity", 0)
+			.attr("fill-opacity", 0)
+			;
 
 	var t = vis.transition().duration(1500).ease("exp-in-out");
 	t.select(".x.axis").call(xAxis);
@@ -173,7 +175,6 @@ function processData (data) {
 				else {listing[attribute] = data[attribute];}
 			}
 		}
-
 		processed.push(listing);
 	})
 
