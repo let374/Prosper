@@ -1,6 +1,6 @@
 var WIDTH = 800,
 	HEIGHT = 350,
-	MARGINS = {top: 25, right: 25, bottom: 25, left: 50},
+	MARGINS = {top: 0, right: 25, bottom: 25, left: 75},
 	xRange = d3.scale.linear().range ([MARGINS.left, WIDTH - MARGINS.right]),
 	yRange = d3.scale.linear().range ([HEIGHT - MARGINS.top, MARGINS.bottom]),
 	rRange = d3.scale.linear().range([5,20]),
@@ -14,7 +14,8 @@ var WIDTH = 800,
 	lastUpdateTime,
 	currentTime,
 	nextUpdateTime,
-	vis;
+	vis,
+	svg;
 
 function startTime() {
 	currentTime = new Date();
@@ -24,20 +25,29 @@ function startTime() {
 	else {t=setTimeout(function(){startTime()},500);}
 }
 
+//first thing first
 function init () {
+	
 	vis = d3.select("#visualisation");
+
 	vis.append("svg:g")
 		.attr("class", "y axis")
 		.attr("transform", "translate(" + MARGINS.left + ",0)")
 		.call(yAxis);
+
 	vis.append("svg:g") // add a container for the axis
 		.attr("class", "x axis") // add some classes so we can style it
 		.attr("transform", "translate(0," + HEIGHT + ")")
 		.call(xAxis); // finally, add the axis to the visualisation
 
+	//append x-axis label
+	vis.append("text") 
+		.attr("class", "axis-label")
+		.attr("id", "x-axis-label")
+		.attr("x", WIDTH/2)
+		.style("text-anchor", "middle")
  
 	//get field level data
-
 	d3.json("prosperlistingfields.php")
 		.get(function(error,data) {
 			fields = data;
@@ -122,6 +132,10 @@ function redraw() {
 	var t = vis.transition().duration(1500).ease("exp-in-out");
 	t.select(".x.axis").call(xAxis);
 	t.select(".y.axis").call(yAxis);
+
+	vis.select("#x-axis-label")
+		.text(axes.xAxis)
+		.attr("y", HEIGHT + 50);
 
 	//transition the points
 	listings.transition().duration(1500).ease("exp-in-out")
