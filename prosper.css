@@ -20,11 +20,16 @@ ul
 .axis text
 {
 	fill: #fff;
+	font-family: sans-serif;
+	font-size: 11px;
 }
-.axis .domain
+.axis path, .axis line
 {
-	opacity: 0;
+	fill: none;
+	stroke: black;
+	shape-rendering: crispEdges;
 }
+
 .tick
 {
 	stroke: #000;

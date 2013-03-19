@@ -1,14 +1,15 @@
 var WIDTH = 800,
 	HEIGHT = 350,
-	MARGINS = {top: 0, right: 25, bottom: 25, left: 75},
+	MARGINS = {top: 0, right: 25, bottom: 25, left: 100},
+	PADDING = 25,
 	xRange = d3.scale.linear().range ([MARGINS.left, WIDTH - MARGINS.right]),
 	yRange = d3.scale.linear().range ([HEIGHT - MARGINS.top, MARGINS.bottom]),
 	rRange = d3.scale.linear().range([5,20]),
-	colours = ["#981C30","#989415","#1E4559","#7F7274","#4C4A12","#ffffff","#4B0612","#1EAAE4","#AD5E71","#000000"],
+	colours = ["#000000","#B2182B","#EF8A62","#FDDBC7","#F7F7F7","#D1E5F0","#67A9CF","#2166AC"],
 	rawData,
 	drawingData,
-	xAxis = d3.svg.axis().scale(xRange).tickSize(20).tickSubdivide(true),
-	yAxis = d3.svg.axis().scale(yRange).tickSize(10).orient("left").tickSubdivide(true),
+	xAxis = d3.svg.axis().scale(xRange).tickSize(5).tickSubdivide(true),
+	yAxis = d3.svg.axis().scale(yRange).tickSize(5).orient("left").tickSubdivide(true),
 	fields,
 	lastUpdated,
 	lastUpdateTime,
@@ -32,12 +33,12 @@ function init () {
 
 	vis.append("svg:g")
 		.attr("class", "y axis")
-		.attr("transform", "translate(" + MARGINS.left + ",0)")
+		.attr("transform", "translate(" + (MARGINS.left - PADDING) + ",0)")
 		.call(yAxis);
 
 	vis.append("svg:g") // add a container for the axis
 		.attr("class", "x axis") // add some classes so we can style it
-		.attr("transform", "translate(0," + HEIGHT + ")")
+		.attr("transform", "translate(0," + (HEIGHT + PADDING) + ")")
 		.call(xAxis); // finally, add the axis to the visualisation
 
 	//append x-axis label
@@ -45,7 +46,20 @@ function init () {
 		.attr("class", "axis-label")
 		.attr("id", "x-axis-label")
 		.attr("x", WIDTH/2)
-		.style("text-anchor", "middle")
+		.attr("y", HEIGHT + MARGINS.bottom)
+		.attr("dy", "+3em")
+		.style("text-anchor", "middle");
+
+	//append y-axis label
+	vis.append("text")
+		.attr("class", "axis-label")
+		.attr("id", "y-axis-label")
+		.attr("transform", "rotate(-90)")
+		.attr("x", 0-HEIGHT/2)
+		.attr("y", MARGINS.left)
+		.attr("dy", "-5em")
+		.style("text-anchor", "middle");
+
  
 	//get field level data
 	d3.json("prosperlistingfields.php")
@@ -125,20 +139,28 @@ function redraw() {
 			.attr("cx", function(d) { return xRange (d[axes.xAxis]); })
 			.attr("cy", function(d) { return yRange (d[axes.yAxis]); })
 			.attr("stroke", "black")
-			.style("opacity", 0)
-			.attr("fill-opacity", 0)
+			.attr("stroke-width", .5)
+			.attr("stroke-opacity", .75)
+			.style("fill", function(d) {return colours[d.ProsperRating];})
+			.attr("fill-opacity", .75)
 			;
 
-	var t = vis.transition().duration(1500).ease("exp-in-out");
+	var t = vis.transition().duration(3000).ease("exp-in-out");
 	t.select(".x.axis").call(xAxis);
 	t.select(".y.axis").call(yAxis);
 
+	//add x-axis label
 	vis.select("#x-axis-label")
-		.text(axes.xAxis)
-		.attr("y", HEIGHT + 50);
+		.text(axes.xAxis);
+
+
+	//add y-axis label
+	vis.select("#y-axis-label")
+		.text(axes.yAxis);
+
 
 	//transition the points
-	listings.transition().duration(1500).ease("exp-in-out")
+	listings.transition().duration(3000).ease("exp-in-out")
 		.style("opacity", 1)
 		.attr("r", function(d) { return rRange (d[axes.radiusAxis]); })
 		.attr("cx", function (d) { return xRange (d[axes.xAxis]); })
@@ -147,7 +169,7 @@ function redraw() {
 
 	//remove the points if we don't need them anymore
 	listings.exit()
-	.transition().duration(1500).ease("exp-in-out")
+	.transition().duration(3000).ease("exp-in-out")
 	.attr("cx", function (d) { return xRange (d[axes.xAxis]); })
 	.attr("cy", function (d) { return yRange (d[axes.yAxis]); })
 		.style("opacity", 0)
